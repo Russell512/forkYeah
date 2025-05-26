@@ -1,16 +1,12 @@
-# forkyeah
-
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+為了能實現以圖搜圖
+要跑這個程式要先
+python3 -m venv .venv
+然後啟用虛擬環境
+source .venv/bin/activate
+安裝要的套件
+pip install fastapi uvicorn open_clip_torch pillow torch
+然後跑
+python python/clip_server.py (這個就放在一個terminal裡面 然後新開一個terminal)
+-
+另外一個terminal第一次要輸入flutter pub get
+然後再flutter run
