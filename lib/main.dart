@@ -9,6 +9,8 @@ import 'profile_page.dart';
 import 'restaurant_menu_page.dart';
 import 'restaurant_detail_page.dart';
 import 'cart_page.dart';
+import 'delivery_page.dart';
+import 'my_orders_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,6 +40,8 @@ class ForkYeahApp extends StatelessWidget {
         '/profile': (_) => const ProfilePage(),
         '/menu': (_) => const RestaurantMenuPage(),
         '/cart': (_) => const CartPage(),
+        '/delivery': (_) => const DeliveryPage(),
+        '/my_orders': (_) => const MyOrdersPage(),
       },
       onGenerateRoute: (settings) {
         if (settings.name == '/restaurant_detail') {

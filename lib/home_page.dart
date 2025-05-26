@@ -93,7 +93,7 @@ class _AppDrawerState extends State<_AppDrawer> {
           ),
         ] else ...[
           // 如果是顧客，顯示購物車
-          if (role != 'restaurant')
+          if (role == 'customer')
             ListTile(
               leading: const Icon(Icons.shopping_cart),
               title: const Text('我的購物車'),
@@ -111,6 +111,22 @@ class _AppDrawerState extends State<_AppDrawer> {
                 Navigator.pop(context);
                 Navigator.pushNamed(context, '/menu');
               },
+            ),
+          if (role == 'carrier')
+            ListTile(
+              leading: const Icon(Icons.local_shipping),
+              title: const Text('待領取訂單'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushNamed(context, '/delivery');},
+            ),
+          if (role == 'carrier')
+            ListTile(
+              leading: const Icon(Icons.list_alt),
+              title: const Text('我的訂單'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushNamed(context, '/my_orders');},
             ),
           ListTile(
             leading: const Icon(Icons.person),
