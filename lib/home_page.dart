@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
 import 'restaurant_detail_page.dart';
+import 'image_search_page.dart';        // ← 新增
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -16,14 +18,28 @@ class HomePage extends StatelessWidget {
         final user = snap.data?.user;
         final greeting =
             user != null ? '${user.email}，您好！' : '歡迎光臨 ForkYeah';
+
         return Scaffold(
-          appBar: AppBar(title: Text(greeting)),
+          appBar: AppBar(
+            title: Text(greeting),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.search),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const ImageSearchPage()),
+                  );
+                },
+              ),
+            ],
+          ),
           drawer: _AppDrawer(user: user),
           body: const _RestaurantGrid(),
           floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
           floatingActionButton: FloatingActionButton.extended(
             onPressed: () {
-              Navigator.pushNamed(context, '/coupon_wheel');   // ← 改路由
+              Navigator.pushNamed(context, '/coupon_wheel');
             },
             icon: const Icon(Icons.local_activity),
             label: const Text('折價券轉盤'),
@@ -35,7 +51,7 @@ class HomePage extends StatelessWidget {
   }
 }
 
-/* ================= Drawer  ================= */
+/* ================= Drawer ================= */
 class _AppDrawer extends StatefulWidget {
   final User? user;
   const _AppDrawer({required this.user});
@@ -201,8 +217,10 @@ class _RestaurantGridState extends State<_RestaurantGrid> {
 class _RestaurantCard extends StatelessWidget {
   final String restaurantId;
   final String restaurantName;
-  const _RestaurantCard(
-      {required this.restaurantId, required this.restaurantName});
+  const _RestaurantCard({
+    required this.restaurantId,
+    required this.restaurantName,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -211,8 +229,11 @@ class _RestaurantCard extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
         onTap: () {
-          Navigator.pushNamed(context, '/restaurant_detail',
-              arguments: {'id': restaurantId, 'name': restaurantName});
+          Navigator.pushNamed(
+            context,
+            '/restaurant_detail',
+            arguments: {'id': restaurantId, 'name': restaurantName},
+          );
         },
         child: Center(child: Text(restaurantName)),
       ),
