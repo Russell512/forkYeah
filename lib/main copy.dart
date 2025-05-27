@@ -11,16 +11,13 @@ import 'profile_page.dart';
 import 'restaurant_menu_page.dart';
 import 'restaurant_detail_page.dart';
 import 'coupon_wheel_page.dart';
-import 'my_coupons_page.dart'; // <--- 新引入 MyCouponsPage
 import 'cart_page.dart';
 import 'delivery_page.dart';
 import 'my_orders_page.dart';
 import 'customer_orders_page.dart';
 import 'customer_order_detail_page.dart';
 import 'restaurant_active_orders_page.dart';
-import 'restaurant_order_history_page.dart';
-import 'carrier_order_history_page.dart';
-import 'customer_order_history_page.dart';
+import 'customer_order_history_page.dart'; // <--- 確保引入 CustomerOrderHistoryPage
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -59,20 +56,17 @@ class ForkYeahApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (_)                 => const HomePage(),
-        '/signup': (_)           => const SignupPage(),         // 假設建構子是 const
-        '/login': (_)            => const LoginPage(),          // 假設建構子是 const
-        '/profile': (_)          => const ProfilePage(),        // StatefulWidget，假設建構子是 const
-        '/menu': (_)             => const RestaurantMenuPage(), // StatefulWidget，假設建構子是 const
-        '/coupon_wheel': (_)     => const CouponWheelPage(),     // StatefulWidget，假設建構子是 const
-        '/my_coupons': (_)       => const MyCouponsPage(),       // <--- 新增路由 (StatefulWidget，假設建構子是 const)
-        '/cart': (_)             => const CartPage(),            // StatefulWidget，假設建構子是 const
-        '/delivery': (_)         => const DeliveryPage(),        // StatefulWidget，假設建構子是 const
-        '/my_orders': (_)        => const MyOrdersPage(),        // StatefulWidget，假設建構子是 const
-        '/customer_orders':(_)   => const CustomerOrdersPage(),   // StatefulWidget，假設建構子是 const
-        '/restaurant_orders':(_) => const RestaurantActiveOrdersPage(), // StatefulWidget，假設建構子是 const
-        '/customer_order_history':(_) => const CustomerOrderHistoryPage(), // StatefulWidget，假設建構子是 const
-        '/restaurant_order_history':(_) => const RestaurantOrderHistoryPage(), // StatefulWidget，假設建構子是 const
-        '/carrier_order_history':(_)    => const CarrierOrderHistoryPage(),    // StatefulWidget，假設建構子是 const
+        '/signup': (_)           => const SignupPage(), // 假設建構子是 const
+        '/login': (_)            => const LoginPage(),  // 假設建構子是 const
+        '/profile': (_)          => const ProfilePage(),
+        '/menu': (_)             => const RestaurantMenuPage(),
+        '/coupon_wheel': (_)     => const CouponWheelPage(),
+        '/cart': (_)             => const CartPage(),
+        '/delivery': (_)         => const DeliveryPage(),
+        '/my_orders': (_)        => const MyOrdersPage(),
+        '/customer_orders':(_)   => const CustomerOrdersPage(),
+        '/restaurant_orders':(_) => const RestaurantActiveOrdersPage(),
+        '/customer_order_history':(_) => const CustomerOrderHistoryPage(), // <--- 新增這一行路由定義
       },
       onGenerateRoute: (settings) {
         if (settings.name == '/restaurant_detail') {
@@ -94,8 +88,11 @@ class ForkYeahApp extends StatelessWidget {
               builder: (_) => CustomerOrderDetailPage(orderId: orderId),
             );
           }
-          return MaterialPageRoute(builder: (_) => const Scaffold(body: Center(child: Text("錯誤：缺少訂單ID"))));
+          // 如果缺少 order_id，可以返回一個錯誤提示頁面或 null
+          return MaterialPageRoute(builder: (_) => const Scaffold(body: Center(child: Text("錯誤：導航到訂單詳情頁時缺少訂單ID"))));
         }
+        // 如果沒有匹配的路由，可以返回一個預設的未知路由頁面，或者 null 讓 Flutter 處理
+        // return MaterialPageRoute(builder: (_) => const Scaffold(body: Center(child: Text("頁面未找到"))));
         return null;
       },
     );

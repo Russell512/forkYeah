@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
-// 確保這些頁面已存在於你的專案中
 import 'restaurant_detail_page.dart';
 import 'image_search_page.dart';
 import 'chat_eat_page.dart';
@@ -44,10 +43,18 @@ class HomePage extends StatelessWidget {
               ),
             ],
           ),
-          drawer: _AppDrawer(user: user), // Drawer 仍然在這裡
-          body: const _RestaurantGrid(),
-          // floatingActionButtonLocation: FloatingActionButtonLocation.startFloat, // <--- 移除這一行
-          // floatingActionButton: FloatingActionButton.extended( ... ),           // <--- 移除這個 FAB
+          drawer: _AppDrawer(user: user),
+          body: const _RestaurantGrid(), // 正確使用 _RestaurantGrid
+          floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+          floatingActionButton: FloatingActionButton.extended(
+            onPressed: () {
+              Navigator.pushNamed(context, '/coupon_wheel');
+            },
+            icon: const Icon(Icons.local_activity, color: Colors.white),
+            label: const Text('折價券轉盤', style: TextStyle(color: Colors.white)),
+            backgroundColor: Colors.orange.shade600,
+            elevation: 8.0,
+          ),
         );
       },
     );
@@ -133,15 +140,20 @@ class _AppDrawerState extends State<_AppDrawer> {
             ListTile(
               leading: const Icon(Icons.login),
               title: const Text('登入'),
-              onTap: () { Navigator.pop(context); Navigator.pushNamed(context, '/login'); },
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushNamed(context, '/login');
+              },
             ),
             ListTile(
               leading: const Icon(Icons.app_registration_outlined),
               title: const Text('註冊'),
-              onTap: () { Navigator.pop(context); Navigator.pushNamed(context, '/signup'); },
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushNamed(context, '/signup');
+              },
             ),
           ] else ...[
-            // 顧客特定選項
             if (_role == 'customer') ...[
               ListTile(
                 leading: const Icon(Icons.shopping_cart_outlined),
@@ -158,16 +170,7 @@ class _AppDrawerState extends State<_AppDrawer> {
                 title: const Text('歷史訂單'),
                 onTap: () { Navigator.pop(context); Navigator.pushNamed(context, '/customer_order_history'); },
               ),
-              ListTile( // <--- 將折價券轉盤移到這裡
-                leading: Icon(Icons.local_activity_outlined, color: Colors.orange.shade700), // 可以給它一個不同的顏色
-                title: Text('折價券轉盤', style: TextStyle(color: Colors.orange.shade700, fontWeight: FontWeight.bold)),
-                onTap: () {
-                  Navigator.pop(context); // 先關閉 Drawer
-                  Navigator.pushNamed(context, '/coupon_wheel'); // 然後導航
-                },
-              ),
             ],
-            // 餐廳特定選項
             if (_role == 'restaurant') ...[
               ListTile(
                 leading: const Icon(Icons.list_alt_outlined),
@@ -185,7 +188,6 @@ class _AppDrawerState extends State<_AppDrawer> {
                 onTap: () { Navigator.pop(context); Navigator.pushNamed(context, '/menu'); },
               ),
             ],
-            // 外送員特定選項
             if (_role == 'carrier') ...[
               ListTile(
                 leading: const Icon(Icons.two_wheeler_outlined),
@@ -193,17 +195,11 @@ class _AppDrawerState extends State<_AppDrawer> {
                 onTap: () { Navigator.pop(context); Navigator.pushNamed(context, '/delivery'); },
               ),
               ListTile(
-                leading: const Icon(Icons.delivery_dining_outlined),
-                title: const Text('配送中訂單'),
-                onTap: () { Navigator.pop(context); Navigator.pushNamed(context, '/my_orders'); },
-              ),
-              ListTile(
                 leading: const Icon(Icons.history_edu_outlined),
                 title: const Text('我的外送記錄'),
-                onTap: () { Navigator.pop(context); Navigator.pushNamed(context, '/carrier_order_history'); },
+                onTap: () { Navigator.pop(context); Navigator.pushNamed(context, '/my_orders_history'); }, // 注意這裡的路由
               ),
             ],
-            // 通用選項
             ListTile(
               leading: const Icon(Icons.person_outline),
               title: const Text('更改個人檔案'),
@@ -222,12 +218,13 @@ class _AppDrawerState extends State<_AppDrawer> {
   }
 }
 
-// _RestaurantGrid 和 _RestaurantCard 保持不變
+// _RestaurantGrid 和 _RestaurantCard 定義一次
 class _RestaurantGrid extends StatefulWidget {
-  const _RestaurantGrid({super.key});
+  const _RestaurantGrid({super.key}); // <--- 添加 super.key
   @override
   State<_RestaurantGrid> createState() => _RestaurantGridState();
 }
+
 class _RestaurantGridState extends State<_RestaurantGrid> {
   final supa = Supabase.instance.client;
   List<Map<String, dynamic>> _restaurants = [];
@@ -268,10 +265,11 @@ class _RestaurantGridState extends State<_RestaurantGrid> {
     );
   }
 }
+
 class _RestaurantCard extends StatelessWidget {
   final String restaurantId;
   final String restaurantName;
-  const _RestaurantCard({ required this.restaurantId, required this.restaurantName, super.key });
+  const _RestaurantCard({ required this.restaurantId, required this.restaurantName, super.key }); // <--- 添加 super.key
   @override
   Widget build(BuildContext context) {
     final seed = restaurantId.hashCode % 1000;
